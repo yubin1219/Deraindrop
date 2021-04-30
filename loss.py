@@ -52,7 +52,7 @@ class PerceptualLoss(nn.Module):
         trainable_(self.model, False)
         self.loss = nn.MSELoss().to(device)                 
         self.vgg_layers = self.model.features
-        self.layer_names = { '0' : 'conv1_1', '3' : 'relu1_2', '6' : 'relu2_1', '8' : 'relu2_2',  '17' : 'relu3_4' } # 바꿔보기
+        self.layer_names = { '0' : 'conv1_1', '3' : 'relu1_2', '6' : 'relu2_1', '8' : 'relu2_2',  '17' : 'relu3_4' }
 
     def get_layer_output(self, x):
       output = []
@@ -140,7 +140,7 @@ class MaskLoss(nn.Module):
     return self.loss(O_M, gt_M)
 
 class MAPLoss(nn.Module):
-  def __init__(self, gamma=0.8):
+  def __init__(self, gamma=0.1):
     super(MAPLoss, self).__init__()
     self.loss = nn.MSELoss().to(device)
     self.gamma = gamma
