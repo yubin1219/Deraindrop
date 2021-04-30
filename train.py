@@ -82,13 +82,13 @@ class trainer:
     self.expr_dir = './checkpoints'
 
     # Attention Loss
-    self.criterionAtt = AttentionLoss(theta=0.9, iteration=4)  ## theta랑 iteration 수정해보기
+    self.criterionAtt = AttentionLoss(theta=0.9, iteration=4)  
     # GAN Loss
     self.criterionGAN = GANLoss(real_label=1.0, fake_label=0.0)
     # Perceptual Loss
     self.criterionPL = PerceptualLoss()
     # Multiscale Loss
-    self.criterionML = MultiscaleLoss(batch=self.batch_size) ## ld 수정해보기
+    self.criterionML = MultiscaleLoss(batch=self.batch_size) 
     # Mask Loss
     self.criterionMask = MaskLoss()
     # MAP Loss
