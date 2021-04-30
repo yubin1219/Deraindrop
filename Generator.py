@@ -67,40 +67,39 @@ class Generator(nn.Module):
             nn.Conv2d(32, 1, 3, 1, 0),
             nn.Sigmoid()
             )
-        ##  Autoencoder  ##
+                ##  Autoencoder  ##
         self.convm = nn.Sequential(
             nn.Conv2d(4, 32, 1, 1, 0)
         )
-        self.conv1 = nn.Sequential(
+        self.conv = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(4, 32, kernel_size=3, stride=1, padding=0),
-            nn.InstanceNorm2d(32)
+            nn.Conv2d(4, 32, kernel_size=3, stride=1, padding=0)
             )
-        self.encoder1 = nn.Sequential(
+        self.encoder = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(64),
+            nn.ReLU(True),
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=0),
             nn.ReLU(True),
             nn.ReflectionPad2d(1),
             nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(128),
             nn.ReLU(True),
             nn.ReflectionPad2d(1),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0),
-            nn.InstanceNorm2d(128),
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0)
+            )
+        self.conv1 = nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 128, 3, 1, 0)
+        )
+        self.conv1_1 = nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.ReLU(True)
             )
-        ## upsample
-        self.deconv1_1 = nn.Sequential(
-            nn.ConvTranspose2d(128, 64, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
-            nn.ReLU()
-            )
-        self.deconv1_2 = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
+        self.conv1_2 = nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.Sigmoid()
             )
         self.lrelu1 = nn.Sequential(
@@ -108,33 +107,16 @@ class Generator(nn.Module):
             )
         self.dilconv1 = nn.Sequential(
             nn.ReflectionPad2d(2),
-            nn.Conv2d(32, 32, 3, padding=0, dilation=2),
+            nn.Conv2d(128, 128, 3, padding=0, dilation=2),
             )
-        self.encoder2 = nn.Sequential(
+        self.conv2_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(64),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(128),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0),
-            nn.InstanceNorm2d(128),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.ReLU(True)
             )
-        ## upsample
-        self.deconv2_1 = nn.Sequential(
-            nn.ConvTranspose2d(128, 64, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
-            nn.ReLU(True)
-            )
-        self.deconv2_2 = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
+        self.conv2_2 = nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.Sigmoid()
             )
         self.lrelu2 = nn.Sequential(
@@ -142,33 +124,16 @@ class Generator(nn.Module):
             )
         self.dilconv2 = nn.Sequential(
             nn.ReflectionPad2d(4),
-            nn.Conv2d(32, 32, 3, padding=0, dilation=4),
+            nn.Conv2d(128, 128, 3, padding=0, dilation=4),
             )
-        self.encoder3 = nn.Sequential(
+        self.conv3_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(64),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(128),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0),
-            nn.InstanceNorm2d(128),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.ReLU(True)
             )
-        ## upsample
-        self.deconv3_1 = nn.Sequential(
-            nn.ConvTranspose2d(128, 64, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
-            nn.ReLU(True)
-            )
-        self.deconv3_2 = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
+        self.conv3_2 = nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.Sigmoid()
             )
         self.lrelu3 = nn.Sequential(
@@ -176,33 +141,16 @@ class Generator(nn.Module):
             )
         self.dilconv3 = nn.Sequential(
             nn.ReflectionPad2d(8),
-            nn.Conv2d(32, 32, 3, padding=0, dilation=8),
+            nn.Conv2d(128, 128, 3, padding=0, dilation=8),
             )
-        self.encoder4 = nn.Sequential(
+        self.conv4_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(64),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(128),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0),
-            nn.InstanceNorm2d(128),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.ReLU(True)
             )
-        ## upsample
-        self.deconv4_1 = nn.Sequential(
-            nn.ConvTranspose2d(128, 64, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
-            nn.ReLU(True)
-            )
-        self.deconv4_2 = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
+        self.conv4_2 = nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.Sigmoid()
             )
         self.lrelu4 = nn.Sequential(
@@ -210,82 +158,45 @@ class Generator(nn.Module):
             )
         self.dilconv4 = nn.Sequential(
             nn.ReflectionPad2d(16),
-            nn.Conv2d(32, 32, 3, padding=0, dilation=16),
+            nn.Conv2d(128, 128, 3, padding=0, dilation=16),
             )
-        self.encoder5 = nn.Sequential(
+        self.conv5_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(64),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(128),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0),
-            nn.InstanceNorm2d(128),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.ReLU(True)
             )
-        ## upsample
-        self.deconv5_1 = nn.Sequential(
-            nn.ConvTranspose2d(128, 64, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
-            nn.ReLU(True)
-            )
-        self.deconv5_2 = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
+        self.conv5_2 = nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 128, 3, stride=1, padding=0),
             nn.Sigmoid()
             )
         self.lrelu5 = nn.Sequential(
             nn.LeakyReLU(0.2,True)
             )
-        self.conv = nn.Sequential(
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(32, 32, 3, 1, 0),
-            nn.InstanceNorm2d(32)
-        )
-        self.encoder6 = nn.Sequential(
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(64),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=0),
-            nn.InstanceNorm2d(128),
-            nn.ReLU(True),
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0),
-            nn.InstanceNorm2d(128),
-            nn.ReLU(True)
-            )
         self.outframe1 = nn.Sequential(
             nn.Conv2d(128, 3, 1, 1, 0)
             )
         ## upsample
-        self.deconv6_1 = nn.Sequential(
-            nn.ConvTranspose2d(128, 64, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
-            nn.ReLU(True)
+        self.decoder1 = nn.Sequential(
+            nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1),
+            nn.LeakyReLU(0.2,True),
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(64, 64, 3, 1, 0),
+            nn.LeakyReLU(0.2,True)
             )
         self.outframe2 = nn.Sequential(
             nn.Conv2d(64, 3, 1, 1, 0)
             )
-        self.deconv6_2 = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, 4, 2, 1),
-            nn.ReflectionPad2d((1,0,1,0)),
-            nn.AvgPool2d(2,stride=1),
-            nn.Sigmoid()
-            )
-        self.lrelu6 = nn.Sequential(
+        self.decoder2 = nn.Sequential(
+            nn.ConvTranspose2d(64, 32, 4, stride=2, padding=1),
+            nn.LeakyReLU(0.2,True),
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(32, 32, 3, 1, 0),
             nn.LeakyReLU(0.2,True)
             )
         self.output = nn.Sequential(
-            nn.Conv2d(32, 3, 1, 1, 0),
-            nn.Tanh()
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(32, 3, 3, 1, 0)
             )
         
     def forward(self, input):
@@ -313,64 +224,53 @@ class Generator(nn.Module):
             mask = self.det_conv_mask(h)
             mask_list.append(mask)
 
-        xm = torch.cat((input, mask), 1)
-        x = self.convm(xm)
+        x = torch.cat((input, mask), 1)
+        x = self.conv(x)
+        x = self.encoder(x)
         input1 = x
-        x = self.conv1(xm)
+        x = self.conv1(x)
         res = x
-        x = self.encoder1(x)
-        x = self.deconv1_1(x)
-        x = self.deconv1_2(x)
+        x = self.conv1_1(x)
+        x = self.conv1_2(x)
         x = res * x
         x = self.lrelu1(x)
         x = input1 + x
         input2 = x
         x = self.dilconv1(x)
         res = x
-        x = self.encoder2(x)
-        x = self.deconv2_1(x)
-        x = self.deconv2_2(x)
+        x = self.conv2_1(x)
+        x = self.conv2_2(x)
         x = res * x
         x = self.lrelu2(x)
         x = input2 + x
         input3 = x
         x = self.dilconv2(x)
         res = x
-        x = self.encoder3(x)
-        x = self.deconv3_1(x)
-        x = self.deconv3_2(x)
+        x = self.conv3_1(x)
+        x = self.conv3_2(x)
         x = res * x
         x = self.lrelu3(x)
         x = input3 + x
         input4 = x
         x = self.dilconv3(x)
         res = x
-        x = self.encoder4(x)
-        x = self.deconv4_1(x)
-        x = self.deconv4_2(x)
+        x = self.conv4_1(x)
+        x = self.conv4_2(x)
         x = res * x
         x = self.lrelu4(x)
         x = input4 + x
         input5 = x
         x = self.dilconv4(x)
         res = x
-        x = self.encoder5(x)
-        x = self.deconv5_1(x)
-        x = self.deconv5_2(x)
+        x = self.conv5_1(x)
+        x = self.conv5_2(x)
         x = res * x
         x = self.lrelu5(x)
         x = input5 + x
-        input6 = x
-        x = self.conv(x)
-        res = x
-        x = self.encoder6(x)
         frame1 = self.outframe1(x)
-        x = self.deconv6_1(x)
+        x = self.decoder1(x)
         frame2 = self.outframe2(x)
-        x = self.deconv6_2(x)
-        x = res * x
-        x = self.lrelu6(x)
-        x = input6 + x
+        x = self.decoder2(x)
         x = self.output(x)
         
         return mask_list, frame1, frame2, x
