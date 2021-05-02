@@ -78,15 +78,19 @@ class Generator(nn.Module):
         self.encoder = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=0),
+            nn.InstanceNorm2d(64),
             nn.ReLU(True),
             nn.ReflectionPad2d(1),
             nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=0),
+            nn.InstanceNorm2d(64),
             nn.ReLU(True),
             nn.ReflectionPad2d(1),
             nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=0),
+            nn.InstanceNorm2d(128),
             nn.ReLU(True),
             nn.ReflectionPad2d(1),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0)
+            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=0),
+            nn.InstanceNorm2d(128)
             )
         self.conv1 = nn.Sequential(
             nn.ReflectionPad2d(1),
@@ -95,11 +99,13 @@ class Generator(nn.Module):
         self.conv1_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.ReLU(True)
             )
         self.conv1_2 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.Sigmoid()
             )
         self.lrelu1 = nn.Sequential(
@@ -112,11 +118,13 @@ class Generator(nn.Module):
         self.conv2_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.ReLU(True)
             )
         self.conv2_2 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.Sigmoid()
             )
         self.lrelu2 = nn.Sequential(
@@ -129,11 +137,13 @@ class Generator(nn.Module):
         self.conv3_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.ReLU(True)
             )
         self.conv3_2 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.Sigmoid()
             )
         self.lrelu3 = nn.Sequential(
@@ -146,11 +156,13 @@ class Generator(nn.Module):
         self.conv4_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.ReLU(True)
             )
         self.conv4_2 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.Sigmoid()
             )
         self.lrelu4 = nn.Sequential(
@@ -163,11 +175,13 @@ class Generator(nn.Module):
         self.conv5_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.ReLU(True)
             )
         self.conv5_2 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
+            nn.InstanceNorm2d(128),
             nn.Sigmoid()
             )
         self.lrelu5 = nn.Sequential(
@@ -182,6 +196,7 @@ class Generator(nn.Module):
             nn.LeakyReLU(0.2,True),
             nn.ReflectionPad2d(1),
             nn.Conv2d(64, 64, 3, 1, 0),
+            nn.InstanceNorm2d(64),
             nn.LeakyReLU(0.2,True)
             )
         self.outframe2 = nn.Sequential(
@@ -192,6 +207,7 @@ class Generator(nn.Module):
             nn.LeakyReLU(0.2,True),
             nn.ReflectionPad2d(1),
             nn.Conv2d(32, 32, 3, 1, 0),
+            nn.InstanceNorm2d(32),
             nn.LeakyReLU(0.2,True)
             )
         self.output = nn.Sequential(
