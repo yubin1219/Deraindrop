@@ -52,7 +52,7 @@ class PerceptualLoss(nn.Module):
         trainable_(self.model, False)
         self.loss = nn.MSELoss().to(device)                 
         self.vgg_layers = self.model.features
-        self.layer_names = { '0' : 'conv1_1', '3' : 'relu1_2', '5' : 'conv2_1', '8' : 'relu2_2',  '17' : 'relu3_4' }
+        self.layer_names = { '0' : 'conv1_1', '2' : 'conv1_2', '6' : 'relu2_1', '8' : 'relu2_2',  '17' : 'relu3_4' }
 
     def get_layer_output(self, x):
       output = []
