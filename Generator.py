@@ -266,7 +266,7 @@ class Generator(nn.Module):
         x = self.conv5_2(x)
         x = res * x
         x = self.lrelu5(x)
-        x = input5 + x
+        x = input5 + x + input1
         frame1 = self.outframe1(x)
         x = self.decoder1(x)
         frame2 = self.outframe2(x)
