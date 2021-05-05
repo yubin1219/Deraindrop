@@ -140,7 +140,7 @@ class MaskLoss(nn.Module):
     return self.loss(O_M, gt_M)
 
 class MAPLoss(nn.Module):
-  def __init__(self, gamma=0.2):
+  def __init__(self, gamma=0.1):
     super(MAPLoss, self).__init__()
     self.loss = nn.MSELoss().to(device)
     self.gamma = gamma
