@@ -70,18 +70,20 @@ class Generator(nn.Module):
                 ##  Autoencoder  ##
         self.convm = nn.Sequential(
             nn.Conv2d(4, 32, 1, 1, 0)
-        )
+            )
         self.conv = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(4, 32, kernel_size=3, stride=1, padding=0)
             )
-        self.encoder = nn.Sequential(
+        self.encoder1 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(32, 64, kernel_size=3, stride=2, padding=0),
             nn.ReLU(True),
             nn.ReflectionPad2d(1),
             nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=0),
-            nn.ReLU(True),
+            nn.ReLU(True)
+            )
+        self.encoder2 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=0),
             nn.ReLU(True),
@@ -91,7 +93,7 @@ class Generator(nn.Module):
         self.conv1 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, 1, 0)
-        )
+            )
         self.conv1_1 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(128, 128, 3, stride=1, padding=0),
@@ -179,7 +181,9 @@ class Generator(nn.Module):
         ## upsample
         self.decoder1 = nn.Sequential(
             nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1),
-            nn.LeakyReLU(0.2,True),
+            nn.LeakyReLU(0.2,True)
+            )
+        self.conv6 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(64, 64, 3, 1, 0),
             nn.LeakyReLU(0.2,True)
@@ -226,7 +230,9 @@ class Generator(nn.Module):
 
         x = torch.cat((input, mask), 1)
         x = self.conv(x)
-        x = self.encoder(x)
+        x = self.encoder1(x)
+        input0 = x
+        x = self.encoder2(x)
         input1 = x
         x = self.conv1(x)
         res = x
@@ -268,7 +274,8 @@ class Generator(nn.Module):
         x = self.lrelu5(x)
         x = input5 + x + input1
         frame1 = self.outframe1(x)
-        x = self.decoder1(x)
+        x = self.decoder1(x) + input0
+        x = self.conv6(x)
         frame2 = self.outframe2(x)
         x = self.decoder2(x)
         x = self.output(x)
