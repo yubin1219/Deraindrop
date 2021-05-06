@@ -161,8 +161,6 @@ class trainer:
         			loss_disc = 0.5 * loss_real + 0.5 * loss_fake
         			loss_D = loss_disc + loss_MAP
 
-        			#loss_MAP.backward(retain_graph=True)
-        			#loss_disc.backward()
         			loss_D.backward()
 
         			self.optim1.step()
@@ -188,11 +186,6 @@ class trainer:
 
         			loss_G = loss_gan + loss_att + loss_ML + loss_PL + loss_Mask
 
-        			#loss_att.backward(retain_graph=True)
-        			#loss_PL.backward(retain_graph=True)
-        			#loss_ML.backward(retain_graph=True)
-        			#loss_gan.backward(retain_graph=True)
-        			#loss_Mask.backward(retain_graph=True)
         			loss_G.backward(retain_graph=True)     
    
         			self.optim2.step()
