@@ -140,9 +140,9 @@ class trainer:
 
       loss_D = 0.5 * loss_real + 0.5 * loss_fake + loss_MAP
 
-      loss_G = 0.5*loss_gan + loss_att + 2 * loss_ML + loss_PL + 10 * loss_Mask
+      loss_G = 0.5 * loss_gan + loss_att + 2 * loss_ML + 0.7 * loss_PL + 10 * loss_Mask
 
-      output = [loss_G, loss_D, loss_PL, 2 * loss_ML, loss_att, loss_MAP, 0.5*loss_gan, 0.5 * (loss_real + loss_fake), 10 * loss_Mask]
+      output = [loss_G, loss_D, 0.7 * loss_PL, 2 * loss_ML, loss_att, loss_MAP, 0.5 * loss_gan, 0.5 * loss_real + 0.5 * loss_fake, 10 * loss_Mask]
 
     else :
       output = MAE_loss
