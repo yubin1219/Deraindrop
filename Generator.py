@@ -176,26 +176,28 @@ class Generator(nn.Module):
             nn.LeakyReLU(0.2,True)
             )
         self.outframe1 = nn.Sequential(
-            nn.Conv2d(128, 3, 1, 1, 0)
+            nn.Conv2d(256, 3, 1, 1, 0)
             )
         ## upsample
         self.decoder1 = nn.Sequential(
-            nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1),
+            nn.ConvTranspose2d(256, 128, 4, stride=2, padding=1),
             nn.LeakyReLU(0.2,True)
             )
         self.conv6 = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(64, 64, 3, 1, 0),
+            nn.Conv2d(192, 128, 3, 1, 0),
             nn.LeakyReLU(0.2,True)
             )
         self.outframe2 = nn.Sequential(
-            nn.Conv2d(64, 3, 1, 1, 0)
+            nn.Conv2d(128, 3, 1, 1, 0)
             )
         self.decoder2 = nn.Sequential(
-            nn.ConvTranspose2d(64, 32, 4, stride=2, padding=1),
-            nn.LeakyReLU(0.2,True),
+            nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1),
+            nn.LeakyReLU(0.2,True)
+            )
+        self.conv7 = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(32, 32, 3, 1, 0),
+            nn.Conv2d(96, 32, 3, 1, 0),
             nn.LeakyReLU(0.2,True)
             )
         self.output = nn.Sequential(
@@ -230,6 +232,7 @@ class Generator(nn.Module):
 
         x = torch.cat((input, mask), 1)
         x = self.conv(x)
+        input_ = x
         x = self.encoder1(x)
         input0 = x
         x = self.encoder2(x)
@@ -272,12 +275,16 @@ class Generator(nn.Module):
         x = self.conv5_2(x)
         x = res * x
         x = self.lrelu5(x)
-        x = input5 + x + input1
+        x = input5 + x
+        x = torch.cat((x, input1), 1)
         frame1 = self.outframe1(x)
-        x = self.decoder1(x) + input0
+        x = self.decoder1(x)
+        x = torch.cat((x, input0), 1)
         x = self.conv6(x)
         frame2 = self.outframe2(x)
         x = self.decoder2(x)
+        x = torch.cat((x, input_), 1)
+        x = self.conv7(x)
         x = self.output(x)
         
         return mask_list, frame1, frame2, x
