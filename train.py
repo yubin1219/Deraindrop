@@ -136,8 +136,10 @@ class trainer:
 				count+=1
 				A_, I_, GT_, M_, S_, out = self.forward_process(I, GT)
 				
-				## train D
+				## train D ##
+				
 				self.optim_D.zero_grad()
+				
 				D_map_R, D_real = self.net_D(GT_)
         			D_map_O, D_fake = self.net_D(out.detach())
         
@@ -145,28 +147,30 @@ class trainer:
 
         			loss_fake = self.criterionGAN(D_fake,is_real=False)
         			loss_real = self.criterionGAN(D_real,is_real=True)
+				
         			loss_disc = 0.5 * loss_real + 0.5 * loss_fake
+				
         			loss_D = loss_disc + loss_MAP
         			loss_D.backward() 
         			self.optim_D.step()
 				
-				## train G
+				## train G ##
+				
         			self.optim_G.zero_grad()
+				
 				_ , fake = self.net_D(out)
-        			# Attention Loss
+				
         			loss_att = self.criterionAtt(A_,M_.detach())
 
-        			# Perceptual Loss O_ : Generation
         			loss_PL = self.criterionPL(out, GT_)
         
-        			# Multiscale Loss
         			loss_ML = self.criterionML(S_, GT.detach())
 
         			loss_Mask = self.criterionMask(out, GT_.detach(), M_.detach())
 
         			loss_gan = self.criterionGAN(fake,is_real=True)
 
-        			loss_G = 0.5 * loss_gan + loss_att + 2 * loss_ML + 0.7 * loss_PL + 10 * loss_Mask
+        			loss_G = 0.05 * loss_gan + loss_att + 2 * loss_ML + 0.7 * loss_PL + 10 * loss_Mask
         			loss_G.backward()      
         			self.optim_G.step()
 
@@ -237,7 +241,7 @@ class trainer:
       				save_path = os.path.join(self.out_path, w_name)
       				torch.save(self.net_G.state_dict(), save_path)
 
-      				if epoch%30==0 or epoch % 50 == 0 :
+      				if epoch % 30 == 0 or epoch % 50 == 0 :
         				torch.save(self.net_D.state_dict(),"net_D_{}.pth".format(epoch))
 
     				return A_, I_, M, D_map_O, D_map_R, out
