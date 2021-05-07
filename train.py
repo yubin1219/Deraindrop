@@ -78,8 +78,8 @@ class trainer:
 	def __init__(self, iter=500, batch_size=1):
 		self.net_D = Discriminator().to(device)
     		self.net_G = Generator().to(device)
-    		self.optim1 = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_D.parameters()), lr = lr, betas = (0.5,0.999))
-    		self.optim2 = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_G.parameters()), lr = lr, betas = (0.5,0.999))
+    		self.optim_D = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_D.parameters()), lr = lr, betas = (0.5,0.999))
+    		self.optim_G = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_G.parameters()), lr = lr, betas = (0.5,0.999))
     		self.iter = iter
     		self.batch_size = batch_size
     		self.expr_dir = './checkpoints'
@@ -99,19 +99,6 @@ class trainer:
 
     		self.out_path = './weight/'
 		
-	def set_requires_grad(self, nets, requires_grad=False):
-        	"""Set requies_grad=Fasle for all the networks to avoid unnecessary computations
-        	Parameters:
-            	nets (network list)   -- a list of networks
-            	requires_grad (bool)  -- whether the networks require gradients or not
-        	"""
-        	if not isinstance(nets, list):
-            		nets = [nets]
-        	for net in nets:
-            		if net is not None:
-                		for param in net.parameters():
-                    			param.requires_grad = requires_grad
-		
   	def forward_process(self, I, GT):
 		M_ = []
     		for i in range(I.shape[0]):
@@ -124,7 +111,35 @@ class trainer:
     		A_, t1, t2, out = self.net_G(I_)
     		S_ = [t1,t2,out]
     
-    		return M_, I_, GT_, A_, out, S_
+    		D_map_R, D_real = self.net_D(GT_)
+    		D_map_O, D_fake = self.net_D(out.detach())
+    		_ , fake = self.net_D(out)
+
+    		loss_MAP = self.criterionMAP(D_map_O, D_map_R, I.detach(), GT.detach())
+
+    		loss_fake = self.criterionGAN(D_fake,is_real=False)
+    		loss_real = self.criterionGAN(D_real,is_real=True)
+    
+    		loss_D = 0.5 * loss_real + 0.5 * loss_fake + loss_MAP
+
+    		# Attention Loss
+    		loss_att = self.criterionAtt(A_,M_.detach())
+
+    		# Perceptual Loss O_ : Generation
+    		loss_PL = self.criterionPL(out, GT_)
+        
+    		# Multiscale Loss
+    		loss_ML = self.criterionML(S_, GT.detach())
+
+    		loss_Mask = self.criterionMask(out, GT_.detach(), M_.detach())
+
+    		loss_gan = self.criterionGAN(fake,is_real=True)
+
+    		loss_G = 0.5 * loss_gan + loss_att + 2 * loss_ML + 0.7 * loss_PL + 10 * loss_Mask
+
+    		losses = [loss_G, loss_D, loss_att, 2 * loss_ML, 0.7 * loss_PL, 10 * loss_Mask, 0.5 * loss_gan, 0.5 * loss_real + 0.5 * loss_fake, loss_MAP ]
+
+    		return A_, I_, M_, D_map_O, D_map_R, out, losses
 
   	def train_start(self):
     		# I_ : input raindrop image
@@ -147,48 +162,17 @@ class trainer:
 
       			for i, (I_,GT_) in enumerate(train_loader):
 				count+=1
-				self.set_requires_grad(self.net_D, True)
-        			self.optim1.zero_grad()
-				M_, I_, GT_, A_, out, S_ = self.forward_process(I, GT)
+				A_, I_, M, D_map_O, D_map_R, out = self.forward_process(I, GT)
 				
-				## D backward
-				D_map_R, D_real = self.net_D(GT_)
-        			D_map_O, D_fake = self.net_D(out.detach())
-        			loss_MAP = self.criterionMAP(D_map_O, D_map_R, I.detach(), GT.detach())
-        			loss_fake = self.criterionGAN(D_fake,is_real=False)
-        			loss_real = self.criterionGAN(D_real,is_real=True)
-    
-        			loss_disc = 0.5 * loss_real + 0.5 * loss_fake
-        			loss_D = loss_disc + loss_MAP
+				loss_G, loss_D, loss_att, loss_ML, loss_PL, loss_Mask, loss_gan, loss_disc, loss_MAP = losses
 
-        			loss_D.backward()
+        			self.optim_G.zero_grad()
+        			loss_G.backward(retain_graph=True)      
+        			self.optim_G.step()
 
-        			self.optim1.step()
-				
-				## G backward
-        			self.set_requires_grad(self.net_D, False)
-        			self.optim2.zero_grad()
-
-        			# Attention Loss
-        			loss_att = self.criterionAtt(A_,M_.detach())
-
-        			# Perceptual Loss O_ : Generation
-        			loss_PL = 0.7 * self.criterionPL(out, GT_)
-        
-        			# Multiscale Loss
-        			loss_ML = 2 * self.criterionML(S_, GT.detach())
-
-        			loss_Mask = 10 * self.criterionMask(out, GT_.detach(), M_.detach())
-     
-        			_ , fake = self.net_D(out)      
-
-        			loss_gan = 0.5 * self.criterionGAN(fake,is_real=True)
-
-        			loss_G = loss_gan + loss_att + loss_ML + loss_PL + loss_Mask
-
-        			loss_G.backward(retain_graph=True)     
-   
-        			self.optim2.step()
+        			self.optim_D.zero_grad()
+        			loss_D.backward() 
+        			self.optim_D.step()
 
         			tot_loss_G += loss_G.item()
         			tot_loss_D += loss_D.item()
