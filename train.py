@@ -78,7 +78,7 @@ def minmax_scale(input_arr):
 
 ## Pre-train Attention map Generator ##
 class train_Attmap:
-  def __init__(self, iter=500, batch_size=1):
+  def __init__(self, iter=300, batch_size=1):
     self.att_G = Attmap_G().to(device)
     self.optim_att_G = torch.optim.Adam(filter(lambda p : p.requires_grad, self.att_G.parameters()), lr = lr, betas = (0.5,0.999))
     self.iter = iter
