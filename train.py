@@ -85,7 +85,7 @@ class train_Attmap:
     self.batch_size = batch_size
 
     # Attention Loss
-    self.criterionAtt = AttentionLoss(theta=0.9, iteration=5) 
+    self.criterionAtt = AttentionLoss(theta=0.9, iteration=4) 
 
     self.att_path = './weight_Att/'
 
