@@ -170,7 +170,7 @@ class trainer:
 
         			loss_gan = self.criterionGAN(fake,is_real=True)
 
-        			loss_G = 0.05 * loss_gan + loss_att + 2 * loss_ML + 0.7 * loss_PL + 10 * loss_Mask
+        			loss_G = 0.5 * loss_gan + 2 * loss_att + 2 * loss_ML + 0.8 * loss_PL + 10 * loss_Mask
         			loss_G.backward()      
         			self.optim_G.step()
 
