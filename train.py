@@ -126,10 +126,10 @@ class train_Attmap:
         tot_loss_att += loss_att.item()
 
         if count == 1:
-          print('count: {},loss_G: {:.4f} '.format(count,tot_loss_att))
+          print('count: {},loss_att: {:.4f} '.format(count,tot_loss_att))
 
         if count % 20 == 0:
-          print('count: {},loss_G: {:.4f} '.format(count,tot_loss_att/20))
+          print('count: {},loss_att: {:.4f} '.format(count,tot_loss_att/20))
           tot_loss_att = 0.0
       
       step = 0
