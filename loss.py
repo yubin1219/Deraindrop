@@ -52,7 +52,7 @@ class PerceptualLoss(nn.Module):
         trainable_(self.model, False)
         self.loss = nn.MSELoss().to(device)                 
         self.vgg_layers = self.model.features
-        self.layer_names = { '0' : 'conv1_1', '3' : 'relu1_2', '6' : 'relu2_1', '8' : 'relu2_2',  '17' : 'relu3_4' }
+        self.layer_names = { '0' : 'conv1_1', '3' : 'relu1_2', '6' : 'relu2_1', '8' : 'relu2_2',  '11' : 'relu3_1' }
 
     def get_layer_output(self, x):
       output = []
@@ -90,7 +90,7 @@ class PerceptualLoss(nn.Module):
         return loss_PL
         
 class MultiscaleLoss(nn.Module):
-    def __init__(self, ld=[0.7 , 0.8 , 1.0], batch=1):
+    def __init__(self, ld=[0.8 , 1 , 4], batch=1):
         super(MultiscaleLoss, self).__init__()
         self.loss = nn.L1Loss().to(device)
         self.ld = ld
