@@ -74,7 +74,7 @@ class Attmap_G(nn.Module):
     h = Variable(torch.ones(batch_size, 32, row, col)).to(device) / 2.
     c = Variable(torch.ones(batch_size, 32, row, col)).to(device) / 5.
     mask_list = []
-    for i in range(5):
+    for i in range(4):
       x = torch.cat((input, mask), 1)
       x = self.res0(x)
       x = self.res1(x) + x
