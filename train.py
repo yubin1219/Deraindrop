@@ -73,175 +73,251 @@ def minmax_scale(input_arr):
     	output_arr = (input_arr - min_val) / (max_val - min_val)
 
     	return output_arr
-  
-class trainer:
-	def __init__(self, iter=500, batch_size=1):
-		self.net_D = Discriminator().to(device)
-    		self.net_G = Generator().to(device)
-    		self.optim_D = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_D.parameters()), lr = lr, betas = (0.5,0.999))
-    		self.optim_G = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_G.parameters()), lr = lr, betas = (0.5,0.999))
-    		self.iter = iter
-    		self.batch_size = batch_size
-    		self.expr_dir = './checkpoints'
 
-    		# Attention Loss
-    		self.criterionAtt = AttentionLoss(theta=0.9, iteration=4)  
-    		# GAN Loss
-    		self.criterionGAN = GANLoss(real_label=1.0, fake_label=0.0)
-   		 # Perceptual Loss
-    		self.criterionPL = PerceptualLoss()
-   		 # Multiscale Loss
-    		self.criterionML = MultiscaleLoss(batch=self.batch_size) 
-    		# Mask Loss
-    		self.criterionMask = MaskLoss()
-    		# MAP Loss
-    		self.criterionMAP = MAPLoss()
+## Pre-train Attention map Generator ##
+class train_Attmap:
+  def __init__(self, iter=500, batch_size=1):
+    self.att_G = Attmap_G().to(device)
+    self.optim_att_G = torch.optim.Adam(filter(lambda p : p.requires_grad, self.att_G.parameters()), lr = lr, betas = (0.5,0.999))
+    self.iter = iter
+    self.batch_size = batch_size
 
-    		self.out_path = './weight/'
-		
-  	def forward_process(self, I, GT):
-		M_ = []
-    		for i in range(I.shape[0]):
-			M_.append(get_mask(np.array(I[i]),np.array(GT[i])))
-    		M_ = np.array(M_)
-    		M_ = torch_variable(M_, False)
-    		I_ = torch_variable(I, False)
-    		GT_= torch_variable(GT, False)
+    # Attention Loss
+    self.criterionAtt = AttentionLoss(theta=0.9, iteration=5) 
 
-    		A_, t1, t2, out = self.net_G(I_)
-    		S_ = [t1,t2,out]
-		
-		return A_, I_, GT_, M_, S_, out
+    self.att_path = './weight_Att/'
 
-  	def train_start(self):
-    		# I_ : input raindrop image
-    		# A_ : attention map
-    		# M_ : mask GT
-    		# out : output image of the autoencoder
-    		# GT_ : GT
+  def forward_Att(self, I, GT):
+    M_ = []
+    for i in range(I.shape[0]):
+      M_.append(get_mask(np.array(I[i]),np.array(GT[i])))
+    M_ = np.array(M_)
+    M_ = torch_variable(M_, False)
+    I_ = torch_variable(I, False)
+    GT_= torch_variable(GT, False)
 
-    		for epoch in range(1, self.iter+1):
-			tot_loss_G = 0.0
-			tot_loss_D = 0.0
-      			tot_loss_PL = 0.0
-      			tot_loss_ML = 0.0
-      			tot_loss_att = 0.0
-      			tot_loss_MAP = 0.0
-      			tot_loss_GAN = 0.0
-      			tot_loss_disc = 0.0
-      			tot_loss_mask = 0.0
-      			count = 0
+    A_, I_M = self.att_G(I_)
 
-      			for i, (I_,GT_) in enumerate(train_loader):
-				count+=1
-				A_, I_, GT_, M_, S_, out = self.forward_process(I, GT)
-				
-				## train D ##
-				
-				self.optim_D.zero_grad()
-				
-				D_map_R, D_real = self.net_D(GT_)
-        			D_map_O, D_fake = self.net_D(out.detach())
+    return I_, GT_, M_, A_, I_M
+
+  def train_start(self):
+    # I_ : input raindrop image
+    # A_ : attention map
+    # M_ : mask GT
+    # O_ : output image of the autoencoder
+    # T_ : GT
+
+    for epoch in range(1, self.iter+1):
+      tot_loss_att = 0.0
+      count = 0
+      for i, (I, GT) in enumerate(train_loader):
+        count+=1
         
-        			loss_MAP = self.criterionMAP(D_map_O, D_map_R, I.detach(), GT.detach())
-
-        			loss_fake = self.criterionGAN(D_fake,is_real=False)
-        			loss_real = self.criterionGAN(D_real,is_real=True)
-				
-        			loss_disc = 0.5 * loss_real + 0.5 * loss_fake
-				
-        			loss_D = loss_disc + loss_MAP
-        			loss_D.backward() 
-        			self.optim_D.step()
-				
-				## train G ##
-				
-        			self.optim_G.zero_grad()
-				
-				_ , fake = self.net_D(out)
-				
-        			loss_att = self.criterionAtt(A_,M_.detach())
-
-        			loss_PL = self.criterionPL(out, GT_)
+        I_, GT_, M_, A_, I_M = self.forward_Att(I, GT)
         
-        			loss_ML = self.criterionML(S_, GT.detach())
+        loss_att = self.criterionAtt(A_, M_.detach())
 
-        			loss_Mask = self.criterionMask(out, GT_.detach(), M_.detach())
+        self.optim_att_G.zero_grad()
+        loss_att.backward()              
+        self.optim_att_G.step()
 
-        			loss_gan = self.criterionGAN(fake,is_real=True)
+        tot_loss_att += loss_att.item()
 
-        			loss_G = 0.5 * loss_gan + 2 * loss_att + 2 * loss_ML + 0.8 * loss_PL + 10 * loss_Mask
-        			loss_G.backward()      
-        			self.optim_G.step()
+        if count == 1:
+          print('count: {},loss_G: {:.4f} '.format(count,tot_loss_att))
 
-        			tot_loss_G += loss_G.item()
-        			tot_loss_D += loss_D.item()
-        			tot_loss_PL += loss_PL.item()
-        			tot_loss_ML += loss_ML.item()
-        			tot_loss_att += loss_att.item()
-        			tot_loss_MAP += loss_MAP.item()
-        			tot_loss_GAN += loss_gan.item()
-        			tot_loss_disc += loss_disc.item()
-        			tot_loss_mask += loss_Mask.item()
-
-        			if count == 1:
-         				print('count: {},loss_G: {:.4f} ,loss_D: {:.4f} ,loss_GAN: {:.4f} ,loss_disc: {:.4f} , loss_PL: {:.4f} ,loss_ML: {:.4f} ,loss_Att: {:.4f} ,loss_MAP: {:.4f} , loss_Mask: {:.4f}'.format(
-																								count,tot_loss_G,tot_loss_D,
-                                                                                                                                                                                                tot_loss_GAN,tot_loss_disc,
-                                                                                                                                                                                                tot_loss_PL,tot_loss_ML,tot_loss_att,
-                                                                                                                                                                                                tot_loss_MAP,tot_loss_mask))
-
-        			if count % 20 == 0:
-          				print('count: {},loss_G: {:.4f} ,loss_D: {:.4f} ,loss_GAN: {:.4f} ,loss_disc: {:.4f}  ,loss_PL: {:.4f} ,loss_ML: {:.4f} ,loss_Att: {:.4f} ,loss_MAP: {:.4f} , loss_Mask: {:.4f}'.format(
-																						count,tot_loss_G/20,tot_loss_D/20,
-                                                                                                                                                                             	tot_loss_GAN/20,tot_loss_disc/20,
-                                                                                                                                                                             	tot_loss_PL/20,tot_loss_ML/20,tot_loss_att/20,
-                                                                                                                                                                              	tot_loss_MAP/20,tot_loss_mask/20))
-          				tot_loss_G = 0.0
-         	 			tot_loss_D = 0.0
-          				tot_loss_PL = 0.0
-          				tot_loss_ML = 0.0
-          				tot_loss_att = 0.0
-          				tot_loss_MAP = 0.0
-          				tot_loss_GAN = 0.0
-          				tot_loss_disc = 0.0
-          				tot_loss_mask = 0.0
-
-      				step = 0
-      				cumulative_psnr=0
-      				cumulative_ssim=0
-
-     				with torch.no_grad():
-					for i, (I_val,GT_val) in enumerate(valid_dataset):
-          					img=align_to_four(I_val)
-          					GT_val=align_to_four(GT_val)
-          					result=predict(img, self.net_G)
-          					result=minmax_scale(result)
-          					cumulative_psnr+=calc_psnr(result,GT_val)
-          					cumulative_ssim+=calc_ssim(result,GT_val)
-          					step+=1
-          					if epoch % 20 == 0 and step % 10 == 0:
-            					plt.figure(figsize=(10, 10))
-            					plt.subplot(1,3,1)
-						plt.imshow(I_val)
-						plt.axis('off')
-						plt.subplot(1,3,2)
-						plt.imshow(result)
-						plt.axis('off')
-						plt.subplot(1,3,3)
-						plt.imshow(GT_val)
-						plt.axis('off')
-						plt.show()        
+        if count % 20 == 0:
+          print('count: {},loss_G: {:.4f} '.format(count,tot_loss_att/20))
+          tot_loss_att = 0.0
       
-        				print('Epoch : %d , In validation dataset, PSNR is %.4f and SSIM is %.4f'%(epoch, cumulative_psnr/step, cumulative_ssim/step))
+      step = 0
+      val_loss_att=0
+      with torch.no_grad():
+        for j, (I_val, GT_val) in enumerate(valid_loader):
+          I_, GT_, M_, A_, I_M = self.forward_Att(I_val, GT_val)
+          val_loss_att += self.criterionAtt(A_, M_.detach())
+          step += 1
+        print('Epoch : %d , loss_ATT : %.4f'%(epoch, val_loss_att/step))
 
-      				if not os.path.exists(self.out_path):
-        				os.system('mkdir -p {}'.format(self.out_path))
-      				w_name = 'G_epoch_{}_PSNR_{:.2f}_SSIM_{:.4f}.pth'.format(epoch,cumulative_psnr/step,cumulative_ssim/step)
-      				save_path = os.path.join(self.out_path, w_name)
-      				torch.save(self.net_G.state_dict(), save_path)
+      if not os.path.exists(self.att_path):
+        os.system('mkdir -p {}'.format(self.att_path))
+      w_name = 'Att_epoch_{}_loss_{:.4f}.pth'.format(epoch, val_loss_att/step)
+      save_path = os.path.join(self.att_path, w_name)
+      torch.save(self.att_G.state_dict(), save_path)
 
-      				if epoch % 30 == 0 or epoch % 50 == 0 :
-        				torch.save(self.net_D.state_dict(),"net_D_{}.pth".format(epoch))
+    return I_, GT_, M_, A_, I_M
 
-    				return A_, I_, M, D_map_O, D_map_R, out
+## Adversarial train ##
+class trainer:
+  def __init__(self, iter=500, batch_size=1):
+    self.net_D = Discriminator().to(device)
+    self.net_G = Generator().to(device)
+    self.att_G = Attmap_G().to(device)
+    self.optim_D = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_D.parameters()), lr = lr, betas = (0.5,0.999))
+    self.optim_G = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_G.parameters()), lr = lr, betas = (0.5,0.999))
+    self.iter = iter
+    self.batch_size = batch_size
+
+    # GAN Loss
+    self.criterionGAN = GANLoss(real_label=1.0, fake_label=0.0)
+    # Perceptual Loss
+    self.criterionPL = PerceptualLoss()
+    # Multiscale Loss
+    self.criterionML = MultiscaleLoss(batch=self.batch_size)
+    # Mask Loss
+    self.criterionMask = MaskLoss()
+    # MAP Loss
+    self.criterionMAP = MAPLoss()
+
+    self.out_path = './weight/'
+
+  def forward_Att(self, I, GT):
+    M_ = []
+    for i in range(I.shape[0]):
+      M_.append(get_mask(np.array(I[i]),np.array(GT[i])))
+    M_ = np.array(M_)
+    M_ = torch_variable(M_, False)
+    I_ = torch_variable(I, False)
+    GT_= torch_variable(GT, False)
+
+    A_, I_M = self.att_G(I_)
+
+    return I_, GT_, M_, A_, I_M
+
+  def train_start(self):
+    # I_ : input raindrop image
+    # A_ : attention map
+    # M_ : mask GT
+    # O_ : output image of the autoencoder
+    # T_ : GT
+
+    self.att_G.load_state_dict(torch.load("./weight_Att/-.pth"))
+    #self.net_G.load_state_dict(torch.load("./weight_norm/G_epoch_190_PSNR_27.78_SSIM_0.9513.pth"))
+    #self.net_D.load_state_dict(torch.load("./net_D_norm_180.pth"))
+
+    for epoch in range(1, self.iter+1):
+      tot_loss_G = 0.0
+      tot_loss_D = 0.0
+      tot_loss_PL = 0.0
+      tot_loss_ML = 0.0
+      tot_loss_MAP = 0.0
+      tot_loss_GAN = 0.0
+      tot_loss_disc = 0.0
+      tot_loss_mask = 0.0
+      count = 0
+
+      for i, (I, GT) in enumerate(train_loader):
+        count+=1
+        I_, GT_, M_, A_, I_M = self.forward_Att(I, GT)
+
+        t1, t2, out = self.net_G(I_M)
+        S_ = [t1, t2, out]
+
+	# train D #
+        self.optim_D.zero_grad()
+				
+        D_map_R, D_real = self.net_D(GT_)
+        D_map_O, D_fake = self.net_D(out.detach())
+        
+        loss_MAP = self.criterionMAP(D_map_O, D_map_R, I.detach(), GT.detach())
+
+        loss_fake = self.criterionGAN(D_fake,is_real=False)
+        loss_real = self.criterionGAN(D_real,is_real=True)
+				
+        loss_disc = 0.5 * loss_real + 0.5 * loss_fake
+				
+        loss_D = loss_disc + loss_MAP
+
+        loss_D.backward() 
+
+        self.optim_D.step()
+				
+	# train G #
+        self.optim_G.zero_grad()
+				
+        _ , fake = self.net_D(out)
+
+        loss_PL = self.criterionPL(out, GT_)
+        
+        loss_ML = self.criterionML(S_, GT.detach())
+
+        loss_Mask = self.criterionMask(out, GT_.detach(), M_.detach())
+
+        loss_gan = self.criterionGAN(fake,is_real=True)
+
+        loss_G = 0.5 * loss_gan + 5 * loss_ML + 0.8 * loss_PL + 10 * loss_Mask
+
+        loss_G.backward()    
+
+        self.optim_G.step()   
+
+        tot_loss_G += loss_G.item()
+        tot_loss_D += loss_D.item()
+        tot_loss_PL += loss_PL.item()
+        tot_loss_ML += loss_ML.item()
+        tot_loss_MAP += loss_MAP.item()
+        tot_loss_GAN += loss_gan.item()
+        tot_loss_disc += loss_disc.item()
+        tot_loss_mask += loss_Mask.item()
+
+        if count == 1:
+          print('count: {},loss_G: {:.4f} ,loss_D: {:.4f} ,loss_GAN: {:.4f} ,loss_disc: {:.4f} , loss_PL: {:.4f} ,loss_ML: {:.4f} ,loss_MAP: {:.4f} , loss_Mask: {:.4f} , real: {:.2f}, fake: {:.2f}'.format(count,tot_loss_G,
+                                                                                                                                                                                                tot_loss_D,
+                                                                                                                                                                                                tot_loss_GAN,tot_loss_disc,
+                                                                                                                                                                                                tot_loss_PL,tot_loss_ML,
+                                                                                                                                                                                                tot_loss_MAP,tot_loss_mask, float(D_real), float(D_fake)))
+
+        if count % 20 == 0:
+          print('count: {},loss_G: {:.4f} ,loss_D: {:.4f} ,loss_GAN: {:.4f} ,loss_disc: {:.4f}  ,loss_PL: {:.4f} ,loss_ML: {:.4f} ,loss_MAP: {:.4f} , loss_Mask: {:.4f} , real: {:.2f}, fake: {:.2f}'.format(count,tot_loss_G/20,
+                                                                                                                                                                              tot_loss_D/20,
+                                                                                                                                                                              tot_loss_GAN/20,tot_loss_disc/20,
+                                                                                                                                                                              tot_loss_PL/20,tot_loss_ML/20,
+                                                                                                                                                                              tot_loss_MAP/20,tot_loss_mask/20,float(D_real), float(D_fake)))
+          tot_loss_G = 0.0
+          tot_loss_D = 0.0
+          tot_loss_PL = 0.0
+          tot_loss_ML = 0.0
+          tot_loss_MAP = 0.0
+          tot_loss_GAN = 0.0
+          tot_loss_disc = 0.0
+          tot_loss_mask = 0.0
+
+      step = 0
+      cumulative_psnr=0
+      cumulative_ssim=0
+
+      with torch.no_grad():
+        for i, (I_val,GT_val) in enumerate(valid_dataset):
+          img=align_to_four(I_val)
+          GT_val=align_to_four(GT_val)
+          result=predict(img, self.net_G)
+          result=minmax_scale(result)
+          cumulative_psnr+=calc_psnr(result,GT_val)
+          cumulative_ssim+=calc_ssim(result,GT_val)
+          step+=1
+          if epoch % 50 == 0 and step % 10 == 0:
+            plt.figure(figsize=(10, 10))
+            plt.subplot(1,3,1)
+            plt.imshow(I_val)
+            plt.axis('off')
+            plt.subplot(1,3,2)
+            plt.imshow(result)
+            plt.axis('off')
+            plt.subplot(1,3,3)
+            plt.imshow(GT_val)
+            plt.axis('off')
+            plt.show()        
+      
+        print('Epoch : %d , In validation dataset, PSNR is %.4f and SSIM is %.4f'%(epoch, cumulative_psnr/step, cumulative_ssim/step))
+
+      if not os.path.exists(self.out_path):
+        os.system('mkdir -p {}'.format(self.out_path))
+      w_name = 'G_epoch_{}_PSNR_{:.2f}_SSIM_{:.4f}.pth'.format(epoch,cumulative_psnr/step,cumulative_ssim/step)
+      save_path = os.path.join(self.out_path, w_name)
+      torch.save(self.net_G.state_dict(), save_path)
+
+      if epoch % 30 == 0 or epoch % 50 == 0 :
+        torch.save(self.net_D.state_dict(),"net_D_{}.pth".format(epoch))
+
+    torch.save(self.net_D.state_dict(),"net_D_Final.pth")
+    return A_, I_, GT_, M_, D_map_O, D_map_R, out
