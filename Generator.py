@@ -241,9 +241,9 @@ class Generator(nn.Module):
         
     def forward(self, input):      
         x = self.conv(input)
-        input0 = x
+        input_ = x
         x = self.encoder1(x)
-        input1 = x
+        input0 = x
         x = self.encoder2(x)
         
         input1 = x
@@ -293,12 +293,12 @@ class Generator(nn.Module):
         frame1 = self.outframe1(x)
         
         x = self.decoder1(x)
-        x = torch.cat((x, input1), 1)
+        x = torch.cat((x, input0), 1)
         x = self.conv6(x)
         frame2 = self.outframe2(x)
         
         x = self.decoder2(x)
-        x = torch.cat((x, input0), 1)
+        x = torch.cat((x, input_), 1)
         x = self.conv7(x)
         x = self.output(x)
         
