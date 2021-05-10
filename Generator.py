@@ -212,6 +212,7 @@ class Generator(nn.Module):
         self.outframe1 = nn.Sequential(
             nn.Conv2d(128, 3, 1, 1, 0)
             )
+        
         ## upsample
         self.decoder1 = nn.Sequential(
             nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1),
@@ -219,7 +220,7 @@ class Generator(nn.Module):
             )
         self.conv6 = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(128, 64, 3, 1, 0),
+            nn.Conv2d(64, 64, 3, 1, 0),
             nn.LeakyReLU(0.2,True)
             )
         self.outframe2 = nn.Sequential(
@@ -231,7 +232,7 @@ class Generator(nn.Module):
             )
         self.conv7 = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(64, 32, 3, 1, 0),
+            nn.Conv2d(32, 32, 3, 1, 0),
             nn.LeakyReLU(0.2,True)
             )
         self.output = nn.Sequential(
@@ -251,54 +252,55 @@ class Generator(nn.Module):
         res = x
         x = self.conv1_1(x)
         x = self.conv1_2(x)
-        x = res * x
-        x = self.lrelu1(x)
+        x = res * x       
         x = input1 + x
         
         input2 = x
+        x = self.lrelu1(x)
         x = self.dilconv1(x)
         res = x
         x = self.conv2_1(x)
         x = self.conv2_2(x)
-        x = res * x
-        x = self.lrelu2(x)
+        x = res * x     
         x = input2 + x
+        
         input3 = x
+        x = self.lrelu2(x)
         x = self.dilconv2(x)
         res = x
         x = self.conv3_1(x)
         x = self.conv3_2(x)
-        x = res * x
-        x = self.lrelu3(x)
+        x = res * x      
         x = input3 + x
         
         input4 = x
+        x = self.lrelu3(x)
         x = self.dilconv3(x)
         res = x
         x = self.conv4_1(x)
         x = self.conv4_2(x)
-        x = res * x
-        x = self.lrelu4(x)
+        x = res * x        
         x = input4 + x
         
         input5 = x
+        x = self.lrelu4(x)
         x = self.dilconv4(x)
         res = x
         x = self.conv5_1(x)
         x = self.conv5_2(x)
         x = res * x
-        x = self.lrelu5(x)
         x = input5 + x
         
+        x = self.lrelu5(x)
         frame1 = self.outframe1(x)
         
         x = self.decoder1(x)
-        x = torch.cat((x, input0), 1)
+        x = x + input0
         x = self.conv6(x)
         frame2 = self.outframe2(x)
         
         x = self.decoder2(x)
-        x = torch.cat((x, input_), 1)
+        x = x + input_
         x = self.conv7(x)
         x = self.output(x)
         
