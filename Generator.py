@@ -241,10 +241,11 @@ class Generator(nn.Module):
         
     def forward(self, input):      
         x = self.conv(input)
-        input_ = x
-        x = self.encoder1(x)
         input0 = x
+        x = self.encoder1(x)
+        input1 = x
         x = self.encoder2(x)
+        
         input1 = x
         x = self.conv1(x)
         res = x
@@ -253,6 +254,7 @@ class Generator(nn.Module):
         x = res * x
         x = self.lrelu1(x)
         x = input1 + x
+        
         input2 = x
         x = self.dilconv1(x)
         res = x
@@ -269,6 +271,7 @@ class Generator(nn.Module):
         x = res * x
         x = self.lrelu3(x)
         x = input3 + x
+        
         input4 = x
         x = self.dilconv3(x)
         res = x
@@ -277,6 +280,7 @@ class Generator(nn.Module):
         x = res * x
         x = self.lrelu4(x)
         x = input4 + x
+        
         input5 = x
         x = self.dilconv4(x)
         res = x
@@ -285,14 +289,16 @@ class Generator(nn.Module):
         x = res * x
         x = self.lrelu5(x)
         x = input5 + x
-        x = torch.cat((x, input1), 1)
+        
         frame1 = self.outframe1(x)
+        
         x = self.decoder1(x)
-        x = torch.cat((x, input0), 1)
+        x = torch.cat((x, input1), 1)
         x = self.conv6(x)
         frame2 = self.outframe2(x)
+        
         x = self.decoder2(x)
-        x = torch.cat((x, input_), 1)
+        x = torch.cat((x, input0), 1)
         x = self.conv7(x)
         x = self.output(x)
         
