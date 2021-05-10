@@ -247,7 +247,7 @@ class trainer:
 
         loss_gan = self.criterionGAN(fake,is_real=True)
 
-        loss_G = 0.5 * loss_gan + 5 * loss_ML + 0.8 * loss_PL + 10 * loss_Mask
+        loss_G = loss_gan + 10 * loss_ML + 0.8 * loss_PL + 10 * loss_Mask
 
         loss_G.backward()    
 
