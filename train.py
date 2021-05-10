@@ -282,42 +282,4 @@ class trainer:
           tot_loss_disc = 0.0
           tot_loss_mask = 0.0
 
-      step = 0
-      cumulative_psnr=0
-      cumulative_ssim=0
-
-      with torch.no_grad():
-        for i, (I_val,GT_val) in enumerate(valid_dataset):
-          img=align_to_four(I_val)
-          GT_val=align_to_four(GT_val)
-          result=predict(img, self.net_G)
-          result=minmax_scale(result)
-          cumulative_psnr+=calc_psnr(result,GT_val)
-          cumulative_ssim+=calc_ssim(result,GT_val)
-          step+=1
-          if epoch % 50 == 0 and step % 10 == 0:
-            plt.figure(figsize=(10, 10))
-            plt.subplot(1,3,1)
-            plt.imshow(I_val)
-            plt.axis('off')
-            plt.subplot(1,3,2)
-            plt.imshow(result)
-            plt.axis('off')
-            plt.subplot(1,3,3)
-            plt.imshow(GT_val)
-            plt.axis('off')
-            plt.show()        
-      
-        print('Epoch : %d , In validation dataset, PSNR is %.4f and SSIM is %.4f'%(epoch, cumulative_psnr/step, cumulative_ssim/step))
-
-      if not os.path.exists(self.out_path):
-        os.system('mkdir -p {}'.format(self.out_path))
-      w_name = 'G_epoch_{}_PSNR_{:.2f}_SSIM_{:.4f}.pth'.format(epoch,cumulative_psnr/step,cumulative_ssim/step)
-      save_path = os.path.join(self.out_path, w_name)
-      torch.save(self.net_G.state_dict(), save_path)
-
-      if epoch % 30 == 0 or epoch % 50 == 0 :
-        torch.save(self.net_D.state_dict(),"net_D_{}.pth".format(epoch))
-
-    torch.save(self.net_D.state_dict(),"net_D_Final.pth")
     return A_, I_, GT_, M_, D_map_O, D_map_R, out
