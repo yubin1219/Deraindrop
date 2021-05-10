@@ -3,71 +3,105 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 
+class Attmap_G(nn.Module):
+  def __init__(self):
+    super(Attmap_G, self).__init__()
+    self.res0 = nn.Sequential(
+        nn.Conv2d(4, 64, 3, 1, 1),
+        nn.LeakyReLU(0.2)
+        )
+    self.res1 = nn.Sequential(
+        nn.Conv2d(64, 32, 1, 1, 0),
+        nn.LeakyReLU(0.2),
+        nn.Conv2d(32, 32, 3, 1, 1),
+        nn.LeakyReLU(0.2),
+        nn.Conv2d(32, 64, 1, 1, 0)
+        )
+    self.res2 = nn.Sequential(
+        nn.Conv2d(64, 32, 1, 1, 0),
+        nn.LeakyReLU(0.2),
+        nn.Conv2d(32, 32, 3, 1, 1),
+        nn.LeakyReLU(0.2),
+        nn.Conv2d(32, 64, 1, 1, 0)
+        )
+    self.res3 = nn.Sequential(
+        nn.Conv2d(64, 32, 1, 1, 0),
+        nn.LeakyReLU(0.2),
+        nn.Conv2d(32, 32, 3, 1, 1),
+        nn.LeakyReLU(0.2),
+        nn.Conv2d(32, 64, 1, 1, 0)
+        )
+    self.res4 = nn.Sequential(
+        nn.Conv2d(64, 32, 1, 1, 0),
+        nn.LeakyReLU(0.2),
+        nn.Conv2d(32, 32, 3, 1, 1),
+        nn.LeakyReLU(0.2),
+        nn.Conv2d(32, 64, 1, 1, 0)
+        )
+    self.shortcut = nn.Sequential(
+        nn.Conv2d(64, 32, 1, 1, 0)
+        )
+    self.res5 = nn.Sequential(
+        nn.Conv2d(64, 32, 1, 1, 0),
+        nn.LeakyReLU(0.2),
+        nn.Conv2d(32, 32, 3, 1, 1)
+        )
+    self.conv_i = nn.Sequential(
+        nn.Conv2d(32 + 32, 32, 3, 1, 1),
+        nn.Sigmoid()
+        )
+    self.conv_f = nn.Sequential(
+        nn.Conv2d(32 + 32, 32, 3, 1, 1),
+        nn.Sigmoid()
+        )
+    self.conv_g = nn.Sequential(
+        nn.Conv2d(32 + 32, 32, 3, 1, 1),
+        nn.Tanh()
+        )
+    self.conv_o = nn.Sequential(
+        nn.Conv2d(32 + 32, 32, 3, 1, 1),
+        nn.Sigmoid()
+        )
+    self.det_conv_mask = nn.Sequential(
+        nn.ReflectionPad2d(1),
+        nn.Conv2d(32, 1, 3, 1, 0),
+        nn.Sigmoid()
+        )
+    
+  def forward(self, input):
+    batch_size, row, col = input.size(0), input.size(2), input.size(3)
+    mask = Variable(torch.ones(batch_size, 1, row, col)).to(device) / 2.
+    h = Variable(torch.ones(batch_size, 32, row, col)).to(device) / 2.
+    c = Variable(torch.ones(batch_size, 32, row, col)).to(device) / 5.
+    mask_list = []
+    for i in range(5):
+      x = torch.cat((input, mask), 1)
+      x = self.res0(x)
+      x = self.res1(x) + x
+      x = self.res2(x) + x
+      x = self.res3(x) + x
+      x = self.res4(x) + x
+      shortcut = self.shortcut(x)
+      x = F.leaky_relu(self.res5(x) + shortcut,negative_slope=0.2)
+
+      x = torch.cat((x, h), 1)
+      i = self.conv_i(x)
+      f = self.conv_f(x)
+      g = self.conv_g(x)
+      o = self.conv_o(x)
+      c = f * c + i * g
+      h = o * torch.tanh(c)
+      mask = self.det_conv_mask(h)
+      mask_list.append(mask)
+
+    x = torch.cat((input, mask), 1)
+
+    return mask_list, x
+
 class Generator(nn.Module):
     def __init__(self):
-        super(Generator, self).__init__()
-        self.res0 = nn.Sequential(
-            nn.Conv2d(4, 64, 3, 1, 1),
-            nn.LeakyReLU(0.2)
-            )
-        self.res1 = nn.Sequential(
-            nn.Conv2d(64, 32, 1, 1, 0),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 64, 1, 1, 0)
-            )
-        self.res2 = nn.Sequential(
-            nn.Conv2d(64, 32, 1, 1, 0),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 64, 1, 1, 0)
-            )
-        self.res3 = nn.Sequential(
-            nn.Conv2d(64, 32, 1, 1, 0),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 64, 1, 1, 0)
-            )
-        self.res4 = nn.Sequential(
-            nn.Conv2d(64, 32, 1, 1, 0),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 32, 3, 1, 1),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 64, 1, 1, 0)
-            )
-        self.shortcut = nn.Sequential(
-            nn.Conv2d(64, 32, 1, 1, 0)
-        )
-        self.res5 = nn.Sequential(
-            nn.Conv2d(64, 32, 1, 1, 0),
-            nn.LeakyReLU(0.2),
-            nn.Conv2d(32, 32, 3, 1, 1)
-            )
-        self.conv_i = nn.Sequential(
-            nn.Conv2d(32 + 32, 32, 3, 1, 1),
-            nn.Sigmoid()
-            )
-        self.conv_f = nn.Sequential(
-            nn.Conv2d(32 + 32, 32, 3, 1, 1),
-            nn.Sigmoid()
-            )
-        self.conv_g = nn.Sequential(
-            nn.Conv2d(32 + 32, 32, 3, 1, 1),
-            nn.Tanh()
-            )
-        self.conv_o = nn.Sequential(
-            nn.Conv2d(32 + 32, 32, 3, 1, 1),
-            nn.Sigmoid()
-            )
-        self.det_conv_mask = nn.Sequential(
-            nn.ReflectionPad2d(1),
-            nn.Conv2d(32, 1, 3, 1, 0),
-            nn.Sigmoid()
-            )
-                ##  Autoencoder  ##
+        super(Generator, self).__init__()        
+         ##  Autoencoder  ##
         self.convm = nn.Sequential(
             nn.Conv2d(4, 32, 1, 1, 0)
             )
@@ -205,33 +239,8 @@ class Generator(nn.Module):
             nn.Conv2d(32, 3, 3, 1, 0)
             )
         
-    def forward(self, input):
-        batch_size, row, col = input.size(0), input.size(2), input.size(3)
-        mask = Variable(torch.ones(batch_size, 1, row, col)).to(device) / 2.
-        h = Variable(torch.ones(batch_size, 32, row, col)).to(device) / 2.
-        c = Variable(torch.ones(batch_size, 32, row, col)).to(device) / 5.
-        mask_list = []
-        for i in range(4):
-            x = torch.cat((input, mask), 1)
-            x = self.res0(x)
-            x = self.res1(x) + x
-            x = self.res2(x) + x
-            x = self.res3(x) + x
-            x = self.res4(x) + x
-            shortcut = self.shortcut(x)
-            x = F.leaky_relu(self.res5(x) + shortcut,negative_slope=0.2)
-            x = torch.cat((x, h), 1)
-            i = self.conv_i(x)
-            f = self.conv_f(x)
-            g = self.conv_g(x)
-            o = self.conv_o(x)
-            c = f * c + i * g
-            h = o * torch.tanh(c)
-            mask = self.det_conv_mask(h)
-            mask_list.append(mask)
-
-        x = torch.cat((input, mask), 1)
-        x = self.conv(x)
+    def forward(self, input):      
+        x = self.conv(input)
         input_ = x
         x = self.encoder1(x)
         input0 = x
@@ -287,4 +296,4 @@ class Generator(nn.Module):
         x = self.conv7(x)
         x = self.output(x)
         
-        return mask_list, frame1, frame2, x
+        return frame1, frame2, x
