@@ -209,6 +209,27 @@ class Generator(nn.Module):
         self.lrelu5 = nn.Sequential(
             nn.LeakyReLU(0.2,True)
             )
+        self.conv6 = nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 128, 3, 1, 0)
+            )
+        self.conv6_1= nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 16, 3, 1, 0),
+            nn.ReLU(True)
+            )
+        self.conv6_2= nn.Sequential(
+          nn.ReflectionPad2d(1),
+            nn.Conv2d(16, 128, 3, 1, 0),
+            nn.Sigmoid()
+            )  
+        self.lrelu6 = nn.Sequential(
+            nn.LeakyReLU(0.2,True)
+            )
+        self.conv7 = nn.Sequential(
+            nn.ReflectionPad2d(1),
+            nn.Conv2d(128, 128, 3, 1, 0)
+            )
         self.outframe1 = nn.Sequential(
             nn.Conv2d(128, 3, 1, 1, 0)
             )
@@ -218,7 +239,7 @@ class Generator(nn.Module):
             nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1),
             nn.LeakyReLU(0.2,True)
             )
-        self.conv6 = nn.Sequential(
+        self.conv8 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(64, 64, 3, 1, 0),
             nn.LeakyReLU(0.2,True)
@@ -230,14 +251,15 @@ class Generator(nn.Module):
             nn.ConvTranspose2d(64, 32, 4, stride=2, padding=1),
             nn.LeakyReLU(0.2,True)
             )
-        self.conv7 = nn.Sequential(
+        self.conv9 = nn.Sequential(
             nn.ReflectionPad2d(1),
             nn.Conv2d(32, 32, 3, 1, 0),
             nn.LeakyReLU(0.2,True)
             )
         self.output = nn.Sequential(
             nn.ReflectionPad2d(1),
-            nn.Conv2d(32, 3, 3, 1, 0)
+            nn.Conv2d(32, 3, 3, 1, 0),
+            nn.Tanh()
             )
         
     def forward(self, input):      
@@ -291,17 +313,27 @@ class Generator(nn.Module):
         x = res * x
         x = input5 + x
         
+        input6 = x
         x = self.lrelu5(x)
+        x = self.conv6(x)
+        res = x
+        x = self.conv6_1(x)
+        x = self.conv6_2(x)
+        x = res * x
+        x = input6 + x
+        
+        x = self.lrelu6(x)
+        x = self.conv7(x)
         frame1 = self.outframe1(x)
         
         x = self.decoder1(x)
         x = x + input0
-        x = self.conv6(x)
+        x = self.conv8(x)
         frame2 = self.outframe2(x)
         
         x = self.decoder2(x)
         x = x + input_
-        x = self.conv7(x)
+        x = self.conv9(x)
         x = self.output(x)
         
         return frame1, frame2, x
