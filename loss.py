@@ -90,7 +90,7 @@ class PerceptualLoss(nn.Module):
         return loss_PL
         
 class MultiscaleLoss(nn.Module):
-    def __init__(self, ld=[0.8 , 1 , 4], batch=1):
+    def __init__(self, ld=[0.6, 0.8, 4], batch=1):
         super(MultiscaleLoss, self).__init__()
         self.loss = nn.L1Loss().to(device)
         self.ld = ld
