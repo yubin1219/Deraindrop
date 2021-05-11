@@ -327,12 +327,12 @@ class Generator(nn.Module):
         frame1 = self.outframe1(x)
         
         x = self.decoder1(x)
-        x = x + input0
+        x = torch.cat((x, input0), 1)
         x = self.conv8(x)
         frame2 = self.outframe2(x)
         
         x = self.decoder2(x)
-        x = x + input_
+        x = torch.cat((x, input_), 1)
         x = self.conv9(x)
         x = self.output(x)
         
