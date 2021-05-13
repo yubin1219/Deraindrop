@@ -1,6 +1,18 @@
 # Deraindrop
 
 ## Visual Attentive GAN Project
+### Network
+<img src="https://user-images.githubusercontent.com/74402562/118163645-2e7f8780-b45d-11eb-9842-f47ddfbef95b.PNG" width="50%" height="50%"></img>
+- Attention map Generation Module    
+<img src="https://user-images.githubusercontent.com/74402562/118163649-2f181e00-b45d-11eb-9f70-7db8dc2c03e1.PNG" width="60%" height="60%"></img>
+- Autoencoder - Raindrop Free Generation Module     
+<img src="https://user-images.githubusercontent.com/74402562/118163296-c7fa6980-b45c-11eb-9040-5b94ca7f8623.png" width="80%" height="80%"></img>
+
+<img src="https://user-images.githubusercontent.com/74402562/118163301-c92b9680-b45c-11eb-86d9-e4cfc467dd2b.png" width="50%" height="50%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/118163302-c92b9680-b45c-11eb-8100-2803f9bbc406.png" width="50%" height="50%"></img>
+
+------------------------------------
+### Result
 - PSNR : 31.73  , SSIM : 0.9591    
 <img src="https://user-images.githubusercontent.com/74402562/118083626-3a862d80-b3fa-11eb-9edc-97ad098b5daf.png" width="60%" height="60%"></img>
 
