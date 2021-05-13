@@ -98,9 +98,9 @@ class Attmap_G(nn.Module):
 
     return mask_list, x
 
-class Generator(nn.Module):
+class Autoencoder_G(nn.Module):
     def __init__(self):
-        super(Generator, self).__init__()        
+        super(Autoencoder_G, self).__init__()        
          ##  Autoencoder  ##
         self.convm = nn.Sequential(
             nn.Conv2d(4, 32, 1, 1, 0)
