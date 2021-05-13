@@ -122,7 +122,8 @@ class Generator(nn.Module):
             nn.Conv2d(64, 128, kernel_size=3, stride=2, padding=0),
             nn.ReLU(True),
             nn.ReflectionPad2d(1),
-            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=0)
+            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=0),
+            nn.ReLU(True)
             )
         self.conv1 = nn.Sequential(
             nn.ReflectionPad2d(1),
