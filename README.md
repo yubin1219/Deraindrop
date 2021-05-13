@@ -4,7 +4,7 @@
 ### Network
 <img src="https://user-images.githubusercontent.com/74402562/118164824-7eab1980-b45e-11eb-9b0e-beab280f1db1.png" width="50%" height="50%"></img>
 - Attention map Generation Module    
-<img src="https://user-images.githubusercontent.com/74402562/118163649-2f181e00-b45d-11eb-9f70-7db8dc2c03e1.PNG" width="60%" height="60%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/118165073-d5185800-b45e-11eb-9377-c136f029aa9b.png" width="60%" height="60%"></img>
 - Autoencoder - Raindrop Free Generation Module     
 <img src="https://user-images.githubusercontent.com/74402562/118163296-c7fa6980-b45c-11eb-9040-5b94ca7f8623.png" width="80%" height="80%"></img>
 
