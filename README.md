@@ -2,7 +2,7 @@
 
 ## Visual Attentive GAN Project
 ### Network
-<img src="https://user-images.githubusercontent.com/74402562/118163645-2e7f8780-b45d-11eb-9842-f47ddfbef95b.PNG" width="50%" height="50%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/118164824-7eab1980-b45e-11eb-9b0e-beab280f1db1.png" width="50%" height="50%"></img>
 - Attention map Generation Module    
 <img src="https://user-images.githubusercontent.com/74402562/118163649-2f181e00-b45d-11eb-9f70-7db8dc2c03e1.PNG" width="60%" height="60%"></img>
 - Autoencoder - Raindrop Free Generation Module     
