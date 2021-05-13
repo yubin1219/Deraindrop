@@ -153,7 +153,7 @@ class train_Attmap:
 class trainer:
   def __init__(self, iter=500, batch_size=1):
     self.net_D = Discriminator().to(device)
-    self.net_G = Generator().to(device)
+    self.net_G = Autoencoder_G().to(device)
     self.att_G = Attmap_G().to(device)
     self.optim_D = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_D.parameters()), lr = lr, betas = (0.5,0.999))
     self.optim_G = torch.optim.Adam(filter(lambda p : p.requires_grad, self.net_G.parameters()), lr = lr, betas = (0.5,0.999))
