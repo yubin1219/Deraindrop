@@ -10,7 +10,7 @@
 
 - Autoencoder - Raindrop Free Generation Module     
 
-<img src="https://user-images.githubusercontent.com/74402562/118163296-c7fa6980-b45c-11eb-9040-5b94ca7f8623.png" width="80%" height="80%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/118232169-28c08b00-b4cb-11eb-945b-b0b057dd99c5.png" width="80%" height="80%"></img>
 
   <img src="https://user-images.githubusercontent.com/74402562/118165525-5839ae00-b45f-11eb-8cfe-5f464ddb3440.png" width="50%" height="50%"></img>
   <img src="https://user-images.githubusercontent.com/74402562/118165527-58d24480-b45f-11eb-9eb9-e2c1678d16d5.png" width="50%" height="50%"></img>
