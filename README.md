@@ -2,18 +2,24 @@
 
 ## Visual Attentive GAN Project
 ### Network
+- Generator
+
   <img src="https://user-images.githubusercontent.com/74402562/118164824-7eab1980-b45e-11eb-9b0e-beab280f1db1.png" width="50%" height="50%"></img>
 
-- Attention map Generation Module    
+  * Attention map Generation Module    
 
-<img src="https://user-images.githubusercontent.com/74402562/118165073-d5185800-b45e-11eb-9377-c136f029aa9b.png" width="60%" height="60%"></img>
+  <img src="https://user-images.githubusercontent.com/74402562/118346899-ef932400-b579-11eb-9f74-18b63db2ff3d.png" width="60%" height="60%"></img>
 
-- Autoencoder - Raindrop Free Generation Module     
+  * Autoencoder - Raindrop Free Generation Module     
 
-<img src="https://user-images.githubusercontent.com/74402562/118232169-28c08b00-b4cb-11eb-945b-b0b057dd99c5.png" width="80%" height="80%"></img>
+  <img src="https://user-images.githubusercontent.com/74402562/118232169-28c08b00-b4cb-11eb-945b-b0b057dd99c5.png" width="80%" height="80%"></img>
 
-  <img src="https://user-images.githubusercontent.com/74402562/118165525-5839ae00-b45f-11eb-8cfe-5f464ddb3440.png" width="50%" height="50%"></img>
-  <img src="https://user-images.githubusercontent.com/74402562/118165527-58d24480-b45f-11eb-9eb9-e2c1678d16d5.png" width="50%" height="50%"></img>
+    <img src="https://user-images.githubusercontent.com/74402562/118165525-5839ae00-b45f-11eb-8cfe-5f464ddb3440.png" width="50%" height="50%"></img>
+    <img src="https://user-images.githubusercontent.com/74402562/118165527-58d24480-b45f-11eb-9eb9-e2c1678d16d5.png" width="50%" height="50%"></img>
+  
+- Discriminator
+
+<img src="https://user-images.githubusercontent.com/74402562/118346902-f6219b80-b579-11eb-8f22-47f8ef25d255.png" width="80%" height="80%"></img>
 
 ------------------------------------
 ### Result
