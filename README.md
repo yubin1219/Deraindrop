@@ -12,10 +12,10 @@
 
   * Autoencoder - Raindrop Free Generation Module     
 
-  <img src="https://user-images.githubusercontent.com/74402562/118232169-28c08b00-b4cb-11eb-945b-b0b057dd99c5.png" width="80%" height="80%"></img>
+  <img src="https://user-images.githubusercontent.com/74402562/118352291-9e942780-b59b-11eb-85ce-ed0ce45f5511.png" width="80%" height="80%"></img>
 
-    <img src="https://user-images.githubusercontent.com/74402562/118165525-5839ae00-b45f-11eb-8cfe-5f464ddb3440.png" width="50%" height="50%"></img>
-    <img src="https://user-images.githubusercontent.com/74402562/118165527-58d24480-b45f-11eb-9eb9-e2c1678d16d5.png" width="50%" height="50%"></img>
+    <img src="https://user-images.githubusercontent.com/74402562/118352288-9d62fa80-b59b-11eb-8dbe-3c145074c484.png" width="50%" height="50%"></img>
+    <img src="https://user-images.githubusercontent.com/74402562/118352290-9e942780-b59b-11eb-85a6-e55ab8c52ad9.png" width="50%" height="50%"></img>
   
 - Discriminator
 
