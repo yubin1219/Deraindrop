@@ -12,7 +12,7 @@ class GANLoss(nn.Module):
         super(GANLoss, self).__init__()
         self.real_label = real_label
         self.fake_label = fake_label
-        self.loss = nn.BCELoss().to(device)
+        #self.loss = nn.BCELoss().to(device)
         self.lsgan = nn.MSELoss().to(device)
 
     def convert_tensor(self, input, is_real):
@@ -25,7 +25,7 @@ class GANLoss(nn.Module):
         return self.lsgan(input, self.convert_tensor(input,is_real).to(device))
 
 class AttentionLoss(nn.Module):
-    def __init__(self, theta=0.9, iteration=4):
+    def __init__(self, theta = 0.9, iteration = 5):
         super(AttentionLoss, self).__init__()
         self.theta = theta
         self.iteration = iteration
@@ -38,6 +38,7 @@ class AttentionLoss(nn.Module):
                 loss_ATT = pow(self.theta, float(self.iteration-i)) * self.loss(A_[i-1],M_)
             else:
                 loss_ATT += pow(self.theta, float(self.iteration-i)) * self.loss(A_[i-1],M_)
+                
         return loss_ATT
 
 # VGG19 pretrained on Imagenet
@@ -62,6 +63,7 @@ class PerceptualLoss(nn.Module):
         x = module(x)
         if name in self.layer_names:
           output.append(x)
+        
       return output
 
     def get_GTlayer_output(self, x):
@@ -73,6 +75,7 @@ class PerceptualLoss(nn.Module):
           x = module(x)
           if name in self.layer_names:
             output.append(x)
+            
       return output
 
     def __call__(self, O_, T_):
@@ -87,10 +90,11 @@ class PerceptualLoss(nn.Module):
 
         loss_PL=loss_PL/float(len(t))        
         loss_PL = Variable(loss_PL,requires_grad=True)
+        
         return loss_PL
         
 class MultiscaleLoss(nn.Module):
-    def __init__(self, ld=[0.6, 0.8, 4], batch=1):
+    def __init__(self, ld=[0.6, 0.8, 8], batch=1):
         super(MultiscaleLoss, self).__init__()
         self.loss = nn.L1Loss().to(device)
         self.ld = ld
@@ -137,6 +141,7 @@ class MaskLoss(nn.Module):
   def __call__(self, O, gt, M):
     O_M = O * M
     gt_M = gt * M
+    
     return self.loss(O_M, gt_M)
 
 class MAPLoss(nn.Module):
@@ -146,17 +151,9 @@ class MAPLoss(nn.Module):
     self.gamma = gamma
 
   # D_map_O, D_map_R
-  def __call__(self, D_O, D_R, I_, gt):
-    x = (np.array(gt[0])*255.).astype(np.uint8)
-    t = cv2.resize(x, None, fx=1.0/4.0,fy=1.0/4.0, interpolation=cv2.INTER_AREA)
-    gt_ = (t/255.).astype(np.float32)
-    x = (np.array(I_[0])*255.).astype(np.uint8)
-    t = cv2.resize(x, None, fx=1.0/4.0,fy=1.0/4.0, interpolation=cv2.INTER_AREA)
-    IN = (t/255.).astype(np.float32)
-    M = get_mask(IN, gt_) #28,28,1
-    M = [M]
-    M = torch.from_numpy(np.array(M).transpose((0,3,1,2))).to(device)
+  def __call__(self, D_O, D_R, M):
     Z = Variable(torch.zeros(D_R.shape)).to(device)
     D_A = self.loss(D_O, M)
     D_Z = self.loss(D_R, Z)
+    
     return self.gamma * (D_A + D_Z)
