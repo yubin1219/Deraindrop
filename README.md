@@ -8,7 +8,7 @@
 
   * Attention map Generation Module    
 
-  <img src="https://user-images.githubusercontent.com/74402562/118346899-ef932400-b579-11eb-9f74-18b63db2ff3d.png" width="60%" height="60%"></img>
+  <img src="https://user-images.githubusercontent.com/74402562/118443035-61a86c00-b726-11eb-93aa-389e755347d1.png" width="60%" height="60%"></img>
 
   * Autoencoder - Raindrop Free Generation Module     
 
@@ -19,7 +19,8 @@
   
 - Discriminator
 
-<img src="https://user-images.githubusercontent.com/74402562/118346902-f6219b80-b579-11eb-8f22-47f8ef25d255.png" width="80%" height="80%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/118443040-62410280-b726-11eb-9a98-e1587be946ff.png" width="80%" height="80%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/118443043-640ac600-b726-11eb-9823-bea25a943c68.png" width="30%" height="30%"></img>
 
 ------------------------------------
 ### Result
