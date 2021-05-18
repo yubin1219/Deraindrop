@@ -78,14 +78,14 @@ def minmax_scale(input_arr):
 
 ## Pre-train Attention map Generator ##
 class train_Attmap:
-  def __init__(self, iter=300, batch_size=1):
+  def __init__(self, iter=400, batch_size=1):
     self.att_G = Attmap_G().to(device)
     self.optim_att_G = torch.optim.Adam(filter(lambda p : p.requires_grad, self.att_G.parameters()), lr = lr, betas = (0.5,0.999))
     self.iter = iter
     self.batch_size = batch_size
 
     # Attention Loss
-    self.criterionAtt = AttentionLoss(theta=0.9, iteration=4) 
+    self.criterionAtt = AttentionLoss(theta = 0.9, iteration = 5) 
 
     self.att_path = './weight_Att/'
 
@@ -194,8 +194,6 @@ class trainer:
     # T_ : GT
 
     self.att_G.load_state_dict(torch.load("./weight_Att/-.pth"))
-    #self.net_G.load_state_dict(torch.load("./weight_norm/G_epoch_190_PSNR_27.78_SSIM_0.9513.pth"))
-    #self.net_D.load_state_dict(torch.load("./net_D_norm_180.pth"))
 
     for epoch in range(1, self.iter+1):
       tot_loss_G = 0.0
@@ -245,7 +243,7 @@ class trainer:
 
         loss_Mask = self.criterionMask(out, GT_.detach(), M_.detach())
 
-        loss_gan = self.criterionGAN(fake,is_real=True)
+        loss_gan = self.criterionGAN(fake, is_real=True)
 
         loss_G = loss_gan + 10 * loss_ML + loss_PL + 10 * loss_Mask
 
