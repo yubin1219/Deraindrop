@@ -55,7 +55,7 @@ class Discriminator(nn.Module):
         nn.LeakyReLU(0.2)
         )
     self.fc = nn.Sequential(
-        nn.Linear(32 * 14 * 14, 1024),
+        nn.Linear(32 * 22 * 15, 1024),
         nn.Linear(1024, 1),
         nn.Sigmoid()
         )
