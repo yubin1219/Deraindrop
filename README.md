@@ -24,38 +24,30 @@
 
 ------------------------------------
 ### Result
-- PSNR : 32.04  , SSIM : 0.9686    
-<img src="https://user-images.githubusercontent.com/74402562/118389185-a3241300-b663-11eb-8c2d-49b8c9feba28.png" width="60%" height="60%"></img>
 
-- PSNR : 36.48  , SSIM : 0.9880   
-<img src="https://user-images.githubusercontent.com/74402562/118389188-a4554000-b663-11eb-8093-ac3b903f7a3e.png" width="60%" height="60%"></img>
+- PSNR : 34.01  , SSIM : 0.9756    
+<img src="https://user-images.githubusercontent.com/74402562/119158025-bd5d5700-ba90-11eb-834f-ec3d469c3d91.png" width="60%" height="60%"></img>
 
-- PSNR : 34.05  , SSIM : 0.9726   
-<img src="https://user-images.githubusercontent.com/74402562/118389189-a4edd680-b663-11eb-9816-91934057c594.png" width="60%" height="60%"></img>
+- PSNR : 30.96  , SSIM : 0.9546   
+<img src="https://user-images.githubusercontent.com/74402562/119158038-bf271a80-ba90-11eb-9122-60516c607ab2.png" width="60%" height="60%"></img>
 
-- PSNR : 33.43  , SSIM : 0.9644   
-<img src="https://user-images.githubusercontent.com/74402562/118389190-a4edd680-b663-11eb-9bfd-7f5da654bfb5.png" width="60%" height="60%"></img>
+- PSNR : 31.12  , SSIM : 0.9589   
+<img src="https://user-images.githubusercontent.com/74402562/119158032-be8e8400-ba90-11eb-91a1-2467fafa7470.png" width="60%" height="60%"></img>
 
-- PSNR : 31.75  , SSIM : 0.9777   
-<img src="https://user-images.githubusercontent.com/74402562/118389191-a5866d00-b663-11eb-9e97-189299e05afa.png" width="60%" height="60%"></img>
+- PSNR : 32.39  , SSIM : 0.9631   
+<img src="https://user-images.githubusercontent.com/74402562/119158040-bf271a80-ba90-11eb-86bb-0a120216b4f2.png" width="60%" height="60%"></img>
 
-- PSNR : 36.46  , SSIM : 0.9839   
-<img src="https://user-images.githubusercontent.com/74402562/118389194-a5866d00-b663-11eb-9ac1-318dc7658cdd.png" width="60%" height="60%"></img>
+- PSNR : 32.74  , SSIM : 0.9649   
+<img src="https://user-images.githubusercontent.com/74402562/119158033-be8e8400-ba90-11eb-9d03-83a7e6df7960.png" width="60%" height="60%"></img>
 
-- PSNR : 34.41  , SSIM : 0.9847   
-<img src="https://user-images.githubusercontent.com/74402562/118389195-a61f0380-b663-11eb-896d-603288ed0cf5.png" width="60%" height="60%"></img>
-
-- PSNR : 34.86  , SSIM : 0.9808   
-<img src="https://user-images.githubusercontent.com/74402562/118389196-a61f0380-b663-11eb-8b8c-a3bfbb94fea2.png" width="60%" height="60%"></img>
+- PSNR : 34.60  , SSIM : 0.9762   
+<img src="https://user-images.githubusercontent.com/74402562/119158043-bfbfb100-ba90-11eb-9f5f-cea72b727fea.png" width="60%" height="60%"></img>
 
 ---------------------------
 ### Result of Object Detection
-<img src="https://user-images.githubusercontent.com/74402562/117578056-7e8ddf80-b127-11eb-9cb4-a5bca46e6b91.png" width="450px" height="180px"></img>
+<img src="https://user-images.githubusercontent.com/74402562/117578056-7e8ddf80-b127-11eb-9cb4-a5bca46e6b91.png" width="40%" height="40%"></img>
 
-<img src="https://user-images.githubusercontent.com/74402562/117578057-80f03980-b127-11eb-8fca-39e23c05ed17.png" width="450px" height="180px"></img>
-
-<img src="https://user-images.githubusercontent.com/74402562/117578060-83529380-b127-11eb-9049-0fc7e03f0a3b.png" width="450px" height="300px"></img>
-<img src="https://user-images.githubusercontent.com/74402562/117578065-864d8400-b127-11eb-993c-be0e9fe84fb0.png" width="450px" height="300px"></img>
+<img src="https://user-images.githubusercontent.com/74402562/117578057-80f03980-b127-11eb-8fca-39e23c05ed17.png" width="40%" height="40%"></img>
 
 -----------------------------
 ### References
