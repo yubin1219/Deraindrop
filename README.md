@@ -9,6 +9,7 @@
   * Attention map Generation Module    
 
   <img src="https://user-images.githubusercontent.com/74402562/118443035-61a86c00-b726-11eb-93aa-389e755347d1.png" width="60%" height="60%"></img>
+  <img src="https://user-images.githubusercontent.com/74402562/119268728-3692b080-bc2f-11eb-83fd-4f371cd3eba0.png" width="100%" height="100%"></img>
 
   * Autoencoder - Raindrop Free Generation Module     
 
@@ -34,14 +35,14 @@
 - PSNR : 31.43  , SSIM : 0.9623   
 <img src="https://user-images.githubusercontent.com/74402562/119220866-86865000-bb27-11eb-960c-f2e0a2494090.png" width="60%" height="60%"></img>
 
-- PSNR : 33.15  , SSIM : 0.9667   
-<img src="https://user-images.githubusercontent.com/74402562/119220871-871ee680-bb27-11eb-93cd-e50f305cdc93.png" width="60%" height="60%"></img>
+- PSNR : 33.36  , SSIM : 0.9678   
+<img src="https://user-images.githubusercontent.com/74402562/119268723-34305680-bc2f-11eb-94f3-af9d06426e6f.png" width="60%" height="60%"></img>
 
 - PSNR : 33.41  , SSIM : 0.9689   
 <img src="https://user-images.githubusercontent.com/74402562/119220872-871ee680-bb27-11eb-8219-2995cdc87725.png" width="60%" height="60%"></img>
 
-- PSNR : 35.23  , SSIM : 0.9785   
-<img src="https://user-images.githubusercontent.com/74402562/119220873-87b77d00-bb27-11eb-8568-fc4b62ec47b1.png" width="60%" height="60%"></img>
+- PSNR : 35.36  , SSIM : 0.9790   
+<img src="https://user-images.githubusercontent.com/74402562/119268727-34c8ed00-bc2f-11eb-8b7e-818d18819015.png" width="60%" height="60%"></img>
 
 ---------------------------
 ### Result of Object Detection
