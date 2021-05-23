@@ -151,7 +151,7 @@ class train_Attmap:
 
 ## Adversarial train ##
 class trainer:
-  def __init__(self, iter=500, batch_size=1):
+  def __init__(self, iter=400, batch_size=1):
     self.net_D = Discriminator().to(device)
     self.net_G = Autoencoder_G().to(device)
     self.att_G = Attmap_G().to(device)
