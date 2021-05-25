@@ -27,22 +27,22 @@
 ### Result
 
 - PSNR : 34.83  , SSIM : 0.9788    
-<img src="https://user-images.githubusercontent.com/74402562/119271200-81b2c080-bc3b-11eb-9bbc-b313a3dfb37a.png" width="60%" height="60%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/119271200-81b2c080-bc3b-11eb-9bbc-b313a3dfb37a.png" width="80%" height="80%"></img>
 
 - PSNR : 30.88  , SSIM : 0.9588   
-<img src="https://user-images.githubusercontent.com/74402562/119271210-87a8a180-bc3b-11eb-834b-014dc783e70b.png" width="60%" height="60%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/119271210-87a8a180-bc3b-11eb-834b-014dc783e70b.png" width="80%" height="80%"></img>
 
 - PSNR : 31.78  , SSIM : 0.9613   
-<img src="https://user-images.githubusercontent.com/74402562/119271207-86777480-bc3b-11eb-9a86-c108302ebc49.png" width="60%" height="60%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/119271207-86777480-bc3b-11eb-9a86-c108302ebc49.png" width="80%" height="80%"></img>
 
 - PSNR : 33.42  , SSIM : 0.9680   
-<img src="https://user-images.githubusercontent.com/74402562/119271212-88413800-bc3b-11eb-98a5-231471d2c1d9.png" width="60%" height="60%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/119271212-88413800-bc3b-11eb-98a5-231471d2c1d9.png" width="80%" height="80%"></img>
 
 - PSNR : 33.59  , SSIM : 0.9697   
-<img src="https://user-images.githubusercontent.com/74402562/119271209-87a8a180-bc3b-11eb-9d35-19114b758865.png" width="60%" height="60%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/119271209-87a8a180-bc3b-11eb-9d35-19114b758865.png" width="80%" height="80%"></img>
 
 - PSNR : 35.36  , SSIM : 0.9792   
-<img src="https://user-images.githubusercontent.com/74402562/119271211-88413800-bc3b-11eb-987a-77c058f0aba5.png" width="60%" height="60%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/119271211-88413800-bc3b-11eb-987a-77c058f0aba5.png" width="80%" height="80%"></img>
 
 ---------------------------
 ### Result of Object Detection
