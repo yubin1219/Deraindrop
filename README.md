@@ -45,8 +45,8 @@
 <img src="https://user-images.githubusercontent.com/74402562/119271211-88413800-bc3b-11eb-987a-77c058f0aba5.png" width="80%" height="80%"></img>
 
 ---------------------------
-### Result of Object Detection
-<img src="https://user-images.githubusercontent.com/74402562/117578056-7e8ddf80-b127-11eb-9cb4-a5bca46e6b91.png" width="70%" height="70%"></img>
+### Result of Object Detection YOLO v3
+<img src="https://user-images.githubusercontent.com/74402562/119944642-78c14680-bfcf-11eb-8dd0-9f868c23f5df.png" width="70%" height="70%"></img>
 
 <img src="https://user-images.githubusercontent.com/74402562/119943906-9a6dfe00-bfce-11eb-9cdb-d3a87bd19b33.png" width="70%" height="70%"></img>
 
