@@ -46,9 +46,22 @@
 
 ---------------------------
 ### Result of Object Detection YOLO v3
-<img src="https://user-images.githubusercontent.com/74402562/119944642-78c14680-bfcf-11eb-8dd0-9f868c23f5df.png" width="70%" height="70%"></img>
+- Raindrop Image & Generative Image   
 
-<img src="https://user-images.githubusercontent.com/74402562/119943906-9a6dfe00-bfce-11eb-9cdb-d3a87bd19b33.png" width="70%" height="70%"></img>
+![rain_124](https://user-images.githubusercontent.com/74402562/119976996-d450fb80-bff2-11eb-838f-d02a475c591c.png)
+![result_124](https://user-images.githubusercontent.com/74402562/119976994-d450fb80-bff2-11eb-9660-7c39875eeef2.png)
+
+![input_447](https://user-images.githubusercontent.com/74402562/119976548-32311380-bff2-11eb-9069-66ea85fe7d39.png)
+![result_447](https://user-images.githubusercontent.com/74402562/119976544-30ffe680-bff2-11eb-968d-a3c84e713bc3.png)
+
+![input_683](https://user-images.githubusercontent.com/74402562/119976988-d2873800-bff2-11eb-944d-7b4f59928865.png)
+![result_683](https://user-images.githubusercontent.com/74402562/119976986-d1eea180-bff2-11eb-8b94-c488d91c72cc.png)
+
+![input_788](https://user-images.githubusercontent.com/74402562/119976990-d31fce80-bff2-11eb-9345-9805ddea2597.png)
+![result_788](https://user-images.githubusercontent.com/74402562/119976989-d31fce80-bff2-11eb-821c-df9d12dd5dec.png)
+
+![input_950](https://user-images.githubusercontent.com/74402562/119976993-d3b86500-bff2-11eb-983c-0020c8e339eb.png)
+![result_950](https://user-images.githubusercontent.com/74402562/119976991-d3b86500-bff2-11eb-9432-1ea42bfb8b1e.png)
 
 -----------------------------
 ### References
