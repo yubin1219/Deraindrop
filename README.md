@@ -46,9 +46,9 @@
 
 ---------------------------
 ### Result of Object Detection
-<img src="https://user-images.githubusercontent.com/74402562/117578056-7e8ddf80-b127-11eb-9cb4-a5bca46e6b91.png" width="50%" height="50%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/117578056-7e8ddf80-b127-11eb-9cb4-a5bca46e6b91.png" width="70%" height="70%"></img>
 
-<img src="https://user-images.githubusercontent.com/74402562/117578057-80f03980-b127-11eb-8fca-39e23c05ed17.png" width="50%" height="50%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/119943906-9a6dfe00-bfce-11eb-9cdb-d3a87bd19b33.png" width="70%" height="70%"></img>
 
 -----------------------------
 ### References
