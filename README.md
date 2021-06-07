@@ -8,7 +8,7 @@
 
   * Attention map Generation Module    
 
-  <img src="https://user-images.githubusercontent.com/74402562/118443035-61a86c00-b726-11eb-93aa-389e755347d1.png" width="60%" height="60%"></img>
+  <img src="https://user-images.githubusercontent.com/74402562/120968059-55528480-c7a3-11eb-8289-cd9c68e42af1.png" width="60%" height="60%"></img>
   <img src="https://user-images.githubusercontent.com/74402562/119268728-3692b080-bc2f-11eb-83fd-4f371cd3eba0.png" width="100%" height="100%"></img>
 
   * Autoencoder - Raindrop Free Generation Module     
