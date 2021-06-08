@@ -49,7 +49,7 @@
 - AttGAN : PSNR 26.25 / SSIM 0.9433
 - Ours : PSNR 36.34 / SSIM 0.9824    
 <img src="https://user-images.githubusercontent.com/74402562/121190059-a5197480-c8a5-11eb-8992-8f543df84ecc.png" width="40%" height="40%"></img>
-<img src="https://user-images.githubusercontent.com/74402562/121190059-a5197480-c8a5-11eb-8992-8f543df84ecc.png" width="40%" height="40%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/121189968-903ce100-c8a5-11eb-8095-2b324b9e22e5.png" width="40%" height="40%"></img>
 <img src="https://user-images.githubusercontent.com/74402562/121190065-a64aa180-c8a5-11eb-9331-a772912478b1.png" width="40%" height="40%"></img>
 <img src="https://user-images.githubusercontent.com/74402562/121190067-a6e33800-c8a5-11eb-8ab2-2617efb3f44d.png" width="40%" height="40%"></img>
 
@@ -77,7 +77,7 @@
 - AttGAN : PSNR 27.13 / SSIM 0.9548
 - Ours : PSNR 34.10 / SSIM 0.9792    
 <img src="https://user-images.githubusercontent.com/74402562/121190119-b19dcd00-c8a5-11eb-95a8-af4274443235.png" width="40%" height="40%"></img>
-<img src="https://user-images.githubusercontent.com/74402562/121190121-b19dcd00-c8a5-11eb-98d7-98a8d073eee8.png" width="40%" height="40%"></img>
+<img src="https://user-images.githubusercontent.com/74402562/121189989-95019500-c8a5-11eb-973a-5a5938f63a87.png" width="40%" height="40%"></img>
 <img src="https://user-images.githubusercontent.com/74402562/121190121-b19dcd00-c8a5-11eb-98d7-98a8d073eee8.png" width="40%" height="40%"></img>
 <img src="https://user-images.githubusercontent.com/74402562/121190123-b2366380-c8a5-11eb-9563-7e71217190d9.png" width="40%" height="40%"></img>
 
