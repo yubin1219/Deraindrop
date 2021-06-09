@@ -46,8 +46,8 @@
 
 ---------------------------
 ### Comparison with Original Attentive GAN   
-- AttGAN : PSNR 26.25 / SSIM 0.9433
-- Ours : PSNR 36.34 / SSIM 0.9824    
+- AttGAN(Input size 720 x 480) : PSNR 26.25 / SSIM 0.9433
+- Ours(Input size 360 x 240) : PSNR 36.34 / SSIM 0.9824    
 <img src="https://user-images.githubusercontent.com/74402562/121190059-a5197480-c8a5-11eb-8992-8f543df84ecc.png" width="40%" height="40%"></img>
 <img src="https://user-images.githubusercontent.com/74402562/121189968-903ce100-c8a5-11eb-8095-2b324b9e22e5.png" width="40%" height="40%"></img>
 <img src="https://user-images.githubusercontent.com/74402562/121190065-a64aa180-c8a5-11eb-9331-a772912478b1.png" width="40%" height="40%"></img>
